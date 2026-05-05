@@ -1,6 +1,5 @@
 \documentclass[11pt]{article}
 
-% --- Packages ---
 \usepackage[margin=1in]{geometry}
 \usepackage{amsmath, amssymb}
 \usepackage{graphicx}
@@ -8,8 +7,7 @@
 \usepackage{hyperref}
 \usepackage{authblk}
 
-% --- Title ---
-\title{\textbf{Residue Manifold Learning: \\ 
+\title{\textbf{Residue Manifold Learning:\\
 Constraint Sampling, Structural Recovery, and Phase-Lock Geometry}}
 
 \author{Dan Hawkley}
@@ -21,17 +19,16 @@ Constraint Sampling, Structural Recovery, and Phase-Lock Geometry}}
 
 \maketitle
 
-% --- Abstract ---
 \begin{abstract}
-We study structure, sampling, and representation in modular arithmetic through the mod30 residue manifold. Prime-support residues form an eight-lane discrete manifold embedded in $\mathbb{Z}/30\mathbb{Z}$. We show that constraint-aligned sampling improves signal access, that nonnegative matrix factorization (NMF) recovers the manifold compactly, and that sparse autoencoder (SAE) configurations can fragment or dilute structure despite comparable reconstruction performance. We introduce the Constraint-Guided Coherence Score (CGCS), a bounded metric for structural fidelity, and demonstrate that representation regimes separate into phase-locked, partial, and diluted regions. Finally, we give a geometric interpretation of CGCS as a cosine alignment constraint with a phase-lock boundary near $45^\circ$. This connects sampling, representation, and geometry in a unified framework.
+We study structure, sampling, and representation in modular arithmetic through the mod30 residue manifold. Prime-support residues form an eight-lane discrete manifold embedded in $\mathbb{Z}/30\mathbb{Z}$. We show that constraint-aligned sampling improves signal access, that nonnegative matrix factorization (NMF) recovers the manifold compactly, and that sparse autoencoder (SAE) configurations can fragment or dilute structure despite comparable reconstruction performance. We introduce the Constraint-Guided Coherence Score (CGCS), a bounded metric for structural fidelity, and demonstrate that representation regimes separate into phase-locked, partial, and diluted regions. Finally, we give a geometric interpretation of CGCS as a cosine alignment constraint with a phase-lock boundary near $45^\circ$, unifying sampling, representation, and geometry.
 \end{abstract}
 
-% --- Introduction ---
+% -------------------------
 \section{Introduction}
 
-Understanding how structure, sampling, and representation interact is central to modern computational learning. Recent work has shown that apparent computational advantages can arise from access to structured data representations rather than fundamentally different computational power. 
+Structure, sampling, and representation interact in determining whether underlying patterns can be recovered from data. Recent work has emphasized that access to structured representations can eliminate apparent computational advantages.
 
-We investigate this principle in a controlled modular setting. Prime residues modulo 30 form a discrete, structured manifold. This provides a minimal environment to study:
+We investigate this interaction in a controlled modular setting. Prime residues modulo 30 form a discrete, structured manifold, providing a minimal environment to study:
 
 \begin{itemize}
 \item Structure: existence of constrained residue lanes
@@ -39,9 +36,9 @@ We investigate this principle in a controlled modular setting. Prime residues mo
 \item Representation: recovery vs fragmentation of structure
 \end{itemize}
 
-We show that these elements interact to determine structural fidelity.
+Our goal is to isolate how these components combine to determine structural fidelity.
 
-% --- Residue Manifold ---
+% -------------------------
 \section{Residue Manifold Structure}
 
 Let $n \in \mathbb{Z}$ and consider residues modulo 30:
@@ -50,37 +47,39 @@ Let $n \in \mathbb{Z}$ and consider residues modulo 30:
 r = n \bmod 30.
 \]
 
-Prime numbers lie only in the residue set:
+Prime numbers lie only in:
 
 \[
 \{1,7,11,13,17,19,23,29\}.
 \]
 
-This defines an eight-lane discrete manifold embedded in $\mathbb{Z}/30\mathbb{Z}$.
+These residues define an eight-lane discrete manifold embedded in $\mathbb{Z}/30\mathbb{Z}$.
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.7\textwidth]{figures/residue_circle_mod30.svg}
-\caption{Residue manifold embedded on a circle. Valid prime-support residues form eight discrete angular lanes.}
+\caption{\textbf{Residue manifold structure.} Valid prime-support residues form eight discrete angular lanes, revealing a structured subset within $\mathbb{Z}/30\mathbb{Z}$.}
 \end{figure}
 
-% --- Sampling ---
+This structure exists independently of any representation method.
+
+% -------------------------
 \section{Constraint Sampling}
 
-We compare two sampling regimes:
+We compare:
 
 \begin{itemize}
 \item Uniform sampling over all residues
-\item Constrained sampling restricted to valid lanes
+\item Sampling restricted to valid lanes
 \end{itemize}
 
-Uniform sampling wastes probability mass outside the manifold:
+Uniform sampling yields:
 
 \[
-\text{signal rate} \approx \frac{8}{30}.
+\text{signal rate} \approx \frac{8}{30},
 \]
 
-Constrained sampling achieves:
+while constrained sampling achieves:
 
 \[
 \text{signal rate} = 1.
@@ -89,15 +88,17 @@ Constrained sampling achieves:
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.75\textwidth]{figures/sampling_signal_rate.svg}
-\caption{Signal rate under uniform vs constrained sampling.}
+\caption{\textbf{Sampling efficiency.} Uniform sampling spreads probability mass outside the manifold, while constraint-aligned sampling concentrates fully on valid residue lanes.}
 \end{figure}
 
-% --- Representation ---
+Thus, sampling determines access to structure.
+
+% -------------------------
 \section{Representation and Recovery}
 
 \subsection{NMF Recovery}
 
-Nonnegative matrix factorization (NMF) recovers the residue manifold as a compact basis:
+Nonnegative matrix factorization (NMF) recovers the residue manifold compactly:
 
 \[
 X \approx WH,
@@ -108,62 +109,59 @@ where $H$ aligns with residue lanes.
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.75\textwidth]{figures/nmf_components.svg}
-\caption{NMF components align with residue lanes.}
+\caption{\textbf{Compact recovery.} NMF components align directly with residue lanes, demonstrating efficient and structured representation.}
 \end{figure}
 
 \subsection{SAE Dilution}
 
-Sparse autoencoders (SAE) may:
+Sparse autoencoders (SAE) may introduce:
 
 \begin{itemize}
-\item duplicate features
-\item leave features inactive
-\item spread features across residues
+\item redundant features
+\item inactive features
+\item diffuse feature support
 \end{itemize}
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.75\textwidth]{figures/sae_dictionary_features.svg}
-\caption{SAE dictionary features showing redundancy and diffusion.}
+\caption{\textbf{Structural dilution.} SAE features distribute across residues, producing redundancy and reduced alignment with the underlying manifold.}
 \end{figure}
 
-% --- Phase Diagram ---
+Thus, representation determines whether structure is preserved or degraded.
+
+% -------------------------
 \section{Phase Diagram of Structural Regimes}
 
-We combine results into a phase diagram over model capacity:
-
-\begin{itemize}
-\item Coverage of valid lanes
-\item Alignment to residue structure
-\item Redundancy and inactive features
-\end{itemize}
+We combine results into a phase diagram over model capacity.
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.75\textwidth]{figures/coverage_phase_diagram.svg}
-\caption{Coverage vs capacity for NMF and SAE.}
+\caption{\textbf{Representation regimes.} NMF achieves full coverage at low capacity, while SAE exhibits partial, fragmented, and diluted regimes as capacity increases.}
 \end{figure}
 
-We observe distinct regimes:
+Distinct regimes emerge:
+
 \begin{itemize}
-\item Recovered (compact, aligned)
+\item Recovered (aligned, compact)
 \item Partial
 \item Diluted
 \item Fragmented
 \end{itemize}
 
-% --- CGCS ---
+% -------------------------
 \section{Constraint-Guided Coherence Score (CGCS)}
 
 We define:
 
 \[
-\text{CGCS} = 
+\text{CGCS} =
 (\text{coverage})
-\times (\text{alignment})
-\times (\text{redundancy penalty})
-\times (\text{dead feature penalty})
-\times (\text{reconstruction penalty})
+(\text{alignment})
+(\text{redundancy penalty})
+(\text{dead feature penalty})
+(\text{reconstruction penalty}).
 \]
 
 CGCS is bounded in $[0,1]$.
@@ -177,10 +175,12 @@ We define a phase-lock threshold:
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.75\textwidth]{figures/cgcs_quality_gate.svg}
-\caption{CGCS separates phase-locked and degraded regimes.}
+\caption{\textbf{Phase-lock threshold.} CGCS separates phase-locked representations from degraded ones, showing that reconstruction accuracy alone does not determine structural fidelity.}
 \end{figure}
 
-% --- Geometry ---
+This provides a quantitative measure of structural quality.
+
+% -------------------------
 \section{Phase-Lock Geometry}
 
 We interpret CGCS geometrically using cosine similarity:
@@ -189,7 +189,7 @@ We interpret CGCS geometrically using cosine similarity:
 \cos \theta = \frac{A \cdot B}{\|A\|\|B\|}.
 \]
 
-Structure quality corresponds to alignment angle $\theta$.
+Structure quality corresponds to alignment angle $\theta$:
 
 \begin{itemize}
 \item $\theta \approx 0^\circ$ — fully aligned
@@ -200,10 +200,12 @@ Structure quality corresponds to alignment angle $\theta$.
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.75\textwidth]{figures/phase_lock_region.svg}
-\caption{Phase-lock region defined by angular threshold.}
+\caption{\textbf{Geometric interpretation.} Structural fidelity corresponds to alignment within a cosine-constrained phase space. The $45^\circ$ boundary defines a phase-lock region consistent with the CGCS threshold.}
 \end{figure}
 
-% --- Discussion ---
+This connects representation quality to geometric alignment.
+
+% -------------------------
 \section{Discussion}
 
 We show that:
@@ -211,17 +213,17 @@ We show that:
 \begin{itemize}
 \item Structure exists independently of representation
 \item Sampling determines access to structure
-\item Representation determines whether structure is preserved
+\item Representation determines preservation of structure
 \end{itemize}
 
-Compact factorizations preserve structure, while overparameterized sparse representations may dilute it.
+Compact representations preserve structure, while overparameterized sparse representations may degrade it.
 
-% --- Conclusion ---
+% -------------------------
 \section{Conclusion}
 
 Residue-manifold learning provides a minimal setting to study structural fidelity. CGCS unifies coverage, alignment, and representation quality into a single metric. Its geometric interpretation reveals a phase-lock boundary governing structure preservation.
 
-% --- References ---
+% -------------------------
 \begin{thebibliography}{9}
 
 \bibitem{tang}
