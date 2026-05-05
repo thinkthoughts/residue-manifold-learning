@@ -1,4 +1,10 @@
+![Residue Manifold Learning](./RML_banner.png)
+
 # Residue Manifold Learning
+
+<p align="center">
+  <a href="paper/paper.pdf"><strong>📄 Read the paper</strong></a>
+</p>
 
 **Residue Manifold Learning (RML)** studies structure, sampling, and representation in modular arithmetic using a mod30 residue manifold as a controlled experimental setting.
 
