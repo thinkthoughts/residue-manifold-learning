@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+title: "Residue Manifold Learning: Constraint Sampling, Structural Recovery, and Phase-Lock Geometry"
+message: "If you use this work, please cite it as below."
+type: software
+authors:
+  - family-names: Hawkley
+    given-names: Dan
+repository-code: https://github.com/thinkthoughts/residue-manifold-learning
+license: MIT
+date-released: 2026-05-05
+version: 0.1.0
