@@ -57,7 +57,7 @@ These residues define an eight-lane discrete manifold embedded in $\mathbb{Z}/30
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.7\textwidth]{figures/residue_circle_mod30.svg}
+\includegraphics[width=0.7\textwidth]{figures/residue_circle_mod30.png}
 \caption{\textbf{Residue manifold structure.} Valid prime-support residues form eight discrete angular lanes, revealing a structured subset within $\mathbb{Z}/30\mathbb{Z}$.}
 \end{figure}
 
@@ -87,7 +87,7 @@ while constrained sampling achieves:
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.75\textwidth]{figures/sampling_signal_rate.svg}
+\includegraphics[width=0.75\textwidth]{figures/sampling_signal_rate.png}
 \caption{\textbf{Sampling efficiency.} Uniform sampling spreads probability mass outside the manifold, while constraint-aligned sampling concentrates fully on valid residue lanes.}
 \end{figure}
 
@@ -108,7 +108,7 @@ where $H$ aligns with residue lanes.
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.75\textwidth]{figures/nmf_components.svg}
+\includegraphics[width=0.75\textwidth]{figures/nmf_components.png}
 \caption{\textbf{Compact recovery.} NMF components align directly with residue lanes, demonstrating efficient and structured representation.}
 \end{figure}
 
@@ -124,7 +124,7 @@ Sparse autoencoders (SAE) may introduce:
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.75\textwidth]{figures/sae_dictionary_features.svg}
+\includegraphics[width=0.75\textwidth]{figures/sae_dictionary_features.png}
 \caption{\textbf{Structural dilution.} SAE features distribute across residues, producing redundancy and reduced alignment with the underlying manifold.}
 \end{figure}
 
@@ -137,7 +137,7 @@ We combine results into a phase diagram over model capacity.
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.75\textwidth]{figures/coverage_phase_diagram.svg}
+\includegraphics[width=0.75\textwidth]{figures/coverage_phase_diagram.png}
 \caption{\textbf{Representation regimes.} NMF achieves full coverage at low capacity, while SAE exhibits partial, fragmented, and diluted regimes as capacity increases.}
 \end{figure}
 
@@ -174,7 +174,7 @@ We define a phase-lock threshold:
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.75\textwidth]{figures/cgcs_quality_gate.svg}
+\includegraphics[width=0.75\textwidth]{figures/cgcs_quality_gate.png}
 \caption{\textbf{Phase-lock threshold.} CGCS separates phase-locked representations from degraded ones, showing that reconstruction accuracy alone does not determine structural fidelity.}
 \end{figure}
 
@@ -199,7 +199,7 @@ Structure quality corresponds to alignment angle $\theta$:
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.75\textwidth]{figures/phase_lock_region.svg}
+\includegraphics[width=0.75\textwidth]{figures/phase_lock_region.png}
 \caption{\textbf{Geometric interpretation.} Structural fidelity corresponds to alignment within a cosine-constrained phase space. The $45^\circ$ boundary defines a phase-lock region consistent with the CGCS threshold.}
 \end{figure}
 
