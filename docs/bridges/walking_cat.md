@@ -1,5 +1,7 @@
 🧩 Bridge: Walking Cat Architecture ↔ Residue Manifold Learning
 
+ (arXiv https://arxiv.org/abs/2604.19481)
+
 Core claim (1–2 lines):
 Walking-cat FTQC implements a dynamic constraint manifold (LDPC + decoding).
 RML models a static constraint manifold (modular residues + CGCS).
