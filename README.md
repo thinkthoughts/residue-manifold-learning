@@ -3,7 +3,7 @@
 # Residue Manifold Learning
 
 <p align="center">
-  <a href="./paper.pdf"><strong>📄 Read the full paper (PDF)</strong></a>
+  <a href="paper/paper.pdf"><strong>📄 Read the full paper (PDF)</strong></a>
 </p>
 
 <p align="center">
