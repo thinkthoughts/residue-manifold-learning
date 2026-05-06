@@ -1,4 +1,4 @@
-![Residue Manifold Learning](./RML_banner.png)
+![Residue Manifold Learning](figures/banner.png)
 
 # Residue Manifold Learning
 
