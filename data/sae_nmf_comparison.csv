@@ -1,3 +1,0 @@
-model,coverage,mean_lane_mass_ratio
-NMF (k=8),1.0,1.0000000149011612
-"SAE (h=16, top-k=2)",0.75,0.44532067235559225
