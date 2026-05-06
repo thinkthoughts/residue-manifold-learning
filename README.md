@@ -3,12 +3,12 @@
 # Residue Manifold Learning
 
 <p align="center">
-  <a href="paper/paper.pdf"><strong>📄 Read the paper</strong></a>
+  <a href="paper/paper.md"><strong>📄 Read the paper (draft)</strong></a>
 </p>
 
-**Residue Manifold Learning (RML)** studies structure, sampling, and representation in modular arithmetic using a mod30 residue manifold as a controlled experimental setting.
+**Residue Manifold Learning (RML)** studies structure, sampling, representation, and **distributed consistency** in modular arithmetic using a mod30 residue manifold as a controlled experimental setting.
 
-The project develops a paper-aligned pipeline showing how structured sampling and representation choices determine whether underlying modular structure is recovered or degraded.
+The project develops a reproducible pipeline showing how structured sampling, representation, and **constraint consistency across noisy links** determine whether underlying modular structure is preserved, degraded, or recoverable.
 
 ---
 
@@ -20,7 +20,10 @@ RML investigates:
 
 - how structure exists independently of representation,
 - how sampling determines access to that structure,
-- how representation determines whether structure is preserved.
+- how representation preserves or fragments structure,
+- how **distributed systems degrade under noisy links**,  
+- how **projection restores constraint consistency**,  
+- how **stability becomes cost-dependent at scale**.
 
 A central result is:
 
@@ -30,15 +33,17 @@ A central result is:
 
 ## What this repo demonstrates
 
-The notebooks build a minimal, reproducible chain:
+The notebooks now build a full systems chain:
 
-1. **Structure** — mod30 residue lanes exist as a discrete manifold  
+1. **Structure** — mod30 residue lanes form a discrete manifold  
 2. **Sampling** — constraint-aligned sampling concentrates signal  
-3. **Recovery** — NMF recovers the manifold compactly  
-4. **Failure modes** — sparse representations can fragment or dilute structure  
-5. **Regimes** — behavior separates into recovered / partial / diluted / fragmented  
-6. **Metric** — CGCS (Constraint-Guided Coherence Score) quantifies structure quality  
-7. **Geometry** — structure quality corresponds to a cosine phase-lock constraint (~45°)
+3. **Recovery** — NMF recovers compact structure  
+4. **Failure modes** — sparse representations fragment structure  
+5. **Metric** — CGCS quantifies structural fidelity  
+6. **Geometry** — structure corresponds to a cosine phase-lock (~45°)  
+7. **Distributed systems** — noisy links degrade global consistency  
+8. **Projection** — constraint projection restores consistency  
+9. **Cost-aware stability** — recovery requires increasing effort under noise  
 
 ---
 
@@ -48,11 +53,15 @@ residue-manifold-learning/
 ├── src/residue_manifold/      # reusable experiment utilities
 ├── scripts/                   # command-line prep scripts
 ├── tests/                     # smoke tests
-├── notebooks/                 # paper-aligned experiments
-├── data/                      # generated CSV outputs
-├── figures/                   # SVG figures for paper
-├── docs/                      # notes / bridges
-└── paper/                     # paper.tex / paper.md
+├── notebooks/                 # experiments (paper-aligned)
+├── figures/                   # canonical repo figures
+├── results/                   # compact CSV/JSON outputs
+├── bridges/                   # external connections (e.g. FTQC)
+├── paper/                     # paper.md (current draft)
+├── README.md
+├── RML_banner.png
+├── pyproject.toml
+├── requirements.txt
 
 ---
 
@@ -76,55 +85,78 @@ pytest
 
 ## Notebook pipeline
 
-1. `01_residue_space.ipynb` — construct mod30 residue manifold  
-2. `02_constraint_sampling.ipynb` — compare sampling strategies  
-3. `03_nmf_recovery.ipynb` — recover structure with NMF  
-4. `04_sae_dilution.ipynb` — show sparse feature fragmentation  
-5. `05_coverage_phase_diagram.ipynb` — map regimes  
-6. `06_cgcs_metric.ipynb` — define CGCS  
-7. `07_phase_lock_geometry.ipynb` — geometric interpretation  
+Core (paper v1):
+
+1. 01_residue_space.ipynb  
+2. 02_constraint_sampling.ipynb  
+3. 03_nmf_recovery.ipynb  
+4. 04_sae_dilution.ipynb  
+5. 05_coverage_phase_diagram.ipynb  
+6. 06_cgcs_metric.ipynb  
+7. 07_phase_lock_geometry.ipynb  
+
+Distributed extension (current work):
+
+8. 05_distributed_residue_consistency.ipynb  
 
 ---
 
 ## CGCS
 
-CGCS measures structural fidelity as a product of:
+Constraint-Guided Coherence Score (CGCS):
 
-- coverage  
-- alignment  
-- redundancy penalty  
-- dead-feature penalty  
-- reconstruction penalty  
+CGCS =
+(coverage)
+(alignment)
+(redundancy penalty)
+(dead feature penalty)
+(reconstruction penalty)
+
+Distributed extension:
+
+CGCS =
+(local coverage)
+(local validity)
+(link consistency)
+(global stability)
 
 Threshold:
 
 CGCS ≥ 24/25 → phase-locked  
-CGCS < 24/25 → degraded
+CGCS < 24/25 → degraded  
+
+---
+
+## Key figure
+
+![Phase Diagram](figures/cost_aware_projection_phase_diagram.png)
+
+This shows:
+
+noise → correction workload increase
+
+rather than simple failure.
 
 ---
 
 ## Tang connection
 
-Ewin Tang’s dequantization result showed that quantum speedups can disappear with structured classical sampling.
+Ewin Tang showed that quantum speedups can disappear with structured classical sampling.
 
-RML explores:
+RML shows:
 
 > when sampling aligns with structure, the manifold becomes directly recoverable.
 
 and extends this:
 
-> representation choice determines whether structure is preserved or diluted.
+> distributed consistency depends on maintaining constraint alignment across noisy links.
 
 ---
 
 ## Paper
 
-paper/paper.tex  
-paper/paper.md  
-
-Figures:
-
-figures/*.svg
+- paper/paper.md (current draft)
+- TeX/PDF coming next
 
 ---
 
@@ -134,9 +166,12 @@ Residue Manifold Learning shows:
 
 - structure exists,
 - sampling reveals it,
-- representation preserves or degrades it,
+- representation preserves or fragments it,
 - CGCS measures it,
-- geometry explains it.
+- geometry explains it,
+- distributed systems degrade under noise,  
+- projection restores consistency,  
+- stability requires increasing effort.
 
 ---
 
