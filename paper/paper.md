@@ -1,154 +1,189 @@
-
-# Residue Manifold Learning:
-## Constraint Sampling, Distributed Consistency, and Cost-Aware Projection
-
-Dan Hawkley  
-https://github.com/thinkthoughts/residue-manifold-learning
+# Residue Manifold Learning
+## Distributed Constraint Consistency, Projection, and Cost-Aware Stability
 
 ---
 
-# Abstract
+## Abstract
 
-We study structure, representation, distributed consistency, and recovery on modular residue manifolds derived from mod30 prime-support residues.
+Residue Manifold Learning (RML) studies structure, sampling, and representation in modular arithmetic using a mod30 residue manifold as a controlled experimental system.
 
-Prime-support residues form an eight-lane discrete manifold embedded in Z/30Z. Earlier experiments demonstrated that constraint-aligned sampling improves structural access, that nonnegative matrix factorization (NMF) recovers compact manifold structure, and that sparse autoencoder (SAE) configurations can fragment or dilute structural fidelity despite similar reconstruction performance.
+We extend this framework to distributed settings, where structure must be maintained across noisy links. We show:
 
-We extend this framework into distributed consistency experiments on residue graphs. Local residue modules remain individually valid while noisy links degrade global structural coherence. We define distributed consistency metrics using the Constraint-Guided Coherence Score (CGCS) and introduce projection-based recovery mechanisms that restore valid constraint relations across noisy links.
+- local structural validity is insufficient for global consistency,
+- link noise induces degradation in distributed coherence,
+- projection (constraint correction) restores consistency,
+- stability becomes cost-dependent under increasing noise.
 
-Finally, we introduce cost-aware projection dynamics, where stability restoration requires increasing correction effort as link noise increases.
-
----
-
-# 1 Introduction
-
-Structure, sampling, representation, and consistency interact in determining whether latent organization can persist under noise and distributed scaling.
-
-The mod30 residue manifold provides a minimal discrete environment to study:
-
-- constrained manifold structure,
-- aligned vs unaligned sampling,
-- compact vs diluted representations,
-- distributed graph consistency,
-- projection-based recovery,
-- cost-aware stabilization.
+We introduce a distributed extension of CGCS (Constraint-Guided Coherence Score) and demonstrate phase behavior governed by noise and correction effort.
 
 ---
 
-# 2 Residue Manifold Structure
+## 1. Introduction
 
-Prime-support residues greater than 5 lie only in:
+Modular residue systems provide a minimal setting in which structure exists independently of representation.
 
-```text
+Prior work in RML established:
+
+- structure exists as residue lanes,
+- sampling reveals structure,
+- representation determines recovery vs fragmentation,
+- CGCS quantifies structural fidelity,
+- geometry explains coherence via phase-lock constraints (~45°).
+
+We extend this into distributed systems, motivated by:
+
+- multi-node architectures,
+- noisy interconnects,
+- constraint propagation across graphs.
+
+---
+
+## 2. Residue Manifold
+
+Residues modulo 30 define eight admissible lanes:
+
 {1, 7, 11, 13, 17, 19, 23, 29}
-```
 
-These residues define an eight-lane discrete manifold embedded in Z/30Z.
+These form a discrete manifold embedded in ℤ/30ℤ.
 
-![Figure 1](figures/distributed_residue_graph_clean.png)
+Structure is invariant under representation but observable only through aligned sampling and recovery.
 
 ---
 
-# 3 Constraint-Guided Coherence Score (CGCS)
+## 3. CGCS (Constraint-Guided Coherence Score)
 
-Distributed consistency depends on:
+Original formulation:
 
-- local validity,
-- link consistency,
-- global graph stability.
+CGCS =
+(coverage)
+(alignment)
+(redundancy penalty)
+(dead feature penalty)
+(reconstruction penalty)
 
-We define:
+Distributed extension:
 
-```text
 CGCS =
 (local coverage)
 (local validity)
 (link consistency)
 (global stability)
-```
+
+Threshold:
+
+CGCS ≥ 24/25 → phase-locked  
+CGCS < 24/25 → degraded  
 
 ---
 
-# 4 Distributed Residue Consistency
+## 4. Distributed Degradation
 
-Distributed residue graphs maintain local structure while exposing sensitivity to noisy links.
+We model distributed residue systems as graphs where nodes hold local structure and edges introduce noise.
 
-![Figure 2](figures/distributed_residue_graph_noisy.png)
+### Result
 
-Dashed edges indicate inconsistent relations introduced through link corruption.
+- local validity remains high under noise
+- link consistency degrades
+- global stability declines
 
----
-
-# 5 Noise Sweeps and Global Stability
-
-As link noise increases:
-
-- local validity remains high,
-- global consistency degrades,
-- CGCS decreases,
-- distributed coherence fragments.
-
-![Figure 3](figures/cgcs_noise_sweep.png)
-
-![Figure 4](figures/global_consistency_heatmap.png)
+![Noise Sweep](../figures/cgcs_noise_sweep.png)
 
 ---
 
-# 6 Projection-Based Recovery
+## 5. Projection Recovery
 
-Projection acts as a decoder analogue:
+We introduce a projection step:
 
-```text
-noisy relation
-→ nearest valid residue relation
-→ restored consistency
-```
+- detect constraint violations
+- correct residues to nearest consistent state
 
-![Figure 5](figures/cgcs_projection_sweep.png)
+### Result
 
----
+- CGCS is restored under projection
+- recovery depends on correction rate
 
-# 7 Cost-Aware Projection
-
-We define:
-
-```text
-effective_CGCS
-=
-CGCS_after
-(1 - alpha * projection_rate)
-```
-
-where:
-- projection rate measures correction workload,
-- alpha measures correction cost sensitivity.
-
-![Figure 6](figures/cgcs_cost_aware_projection.png)
-
-![Figure 7](figures/cost_aware_projection_phase_diagram.png)
+![Projection Sweep](../figures/cgcs_projection_sweep.png)
 
 ---
 
-# 8 Discussion
+## 6. Cost-Aware Stability
 
-The residue manifold now functions as a distributed constraint framework rather than only a representation-learning experiment.
+Projection is not free.
 
-The framework demonstrates:
+We model imperfect projection with success probability < 1.
 
-- structure persists under constraints,
-- distributed consistency depends on links,
-- projection can restore validity,
-- stabilization requires increasing correction effort.
+### Result
 
----
+- stability persists but declines
+- correction cost increases with noise
 
-# 9 Conclusion
-
-Residue-manifold learning provides a minimal environment for studying distributed structural consistency under noisy links.
-
-Projection-based recovery and cost-aware stabilization extend CGCS into a distributed systems observable describing the relationship between noise, correction effort, and global coherence.
+![Cost-Aware Projection](../figures/cgcs_cost_aware_projection.png)
 
 ---
 
-# References
+## 7. Phase Structure
 
-1. E. Tang, A quantum-inspired classical algorithm for recommendation systems, arXiv:1807.04271 (2018).
+We map system behavior across:
+
+- link noise
+- projection success probability
+
+### Result
+
+- system exhibits phase-like regions
+- high-coherence region requires increasing effort
+
+![Phase Diagram](../figures/cost_aware_projection_phase_diagram.png)
+
+---
+
+## 8. Interpretation
+
+Key insight:
+
+> distributed systems fail not from lack of local structure, but from loss of constraint consistency across connections.
+
+Projection acts as:
+
+- decoder analogue
+- constraint enforcement mechanism
+
+Cost-aware behavior suggests:
+
+- scaling is limited by correction effort
+- stability is not binary, but resource-dependent
+
+---
+
+## 9. Connection to Quantum Architectures
+
+Distributed FTQC systems exhibit similar structure:
+
+- local QEC ensures node stability
+- interconnect fidelity dominates scaling
+- decoders act as projection mechanisms
+
+RML provides a minimal analog:
+
+- residue lanes ↔ logical subspaces
+- link noise ↔ interconnect errors
+- projection ↔ decoding
+
+---
+
+## 10. Conclusion
+
+Residue Manifold Learning shows:
+
+- structure exists,
+- sampling reveals it,
+- representation preserves or degrades it,
+- distributed systems degrade under noise,
+- projection restores consistency,
+- stability requires increasing effort.
+
+---
+
+## References
+
+- Tang, E. (2018). Dequantization of quantum algorithms.
