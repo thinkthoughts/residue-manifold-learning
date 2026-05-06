@@ -1,0 +1,84 @@
+{
+  "notebook": "05_distributed_residue_consistency.ipynb",
+  "seed": 9423,
+  "modulus": 30,
+  "admissible_residues": [
+    1,
+    7,
+    11,
+    13,
+    17,
+    19,
+    23,
+    29
+  ],
+  "allowed_differences": [
+    0,
+    2,
+    4,
+    6,
+    8,
+    10,
+    12,
+    14,
+    16,
+    18,
+    20,
+    22,
+    24,
+    26,
+    28
+  ],
+  "core_claim": "Local residue validity can remain high while global consistency drops through noisy links. Projection can restore observed consistency, but correction has cost and imperfect success.",
+  "cgcs_definition": "CGCS = local_coverage \u00d7 local_validity \u00d7 link_consistency \u00d7 global_stability",
+  "effective_cgcs_definition": "effective_CGCS = CGCS_after \u00d7 (1 - alpha \u00d7 projection_rate)",
+  "baseline": {
+    "local_noise": 0.0,
+    "link_noise": 0.0,
+    "local_coverage": 1.0,
+    "local_validity": 1.0,
+    "link_consistency": 1.0,
+    "global_stability": 1.0,
+    "cgcs": 1.0
+  },
+  "high_link_noise": {
+    "local_noise": 0.0,
+    "link_noise": 0.7,
+    "local_coverage": 1.0,
+    "local_validity": 1.0,
+    "link_consistency": 0.65,
+    "global_stability": 0.97,
+    "cgcs": 0.6354166666666666
+  },
+  "cost_aware_final_slice": {
+    "link_noise": 0.7,
+    "p_success": 0.9,
+    "alpha": 0.5,
+    "local_noise": 0.0,
+    "before_cgcs": 0.6676388888888889,
+    "before_link_consistency": 0.685,
+    "before_global_stability": 0.9666666666666667,
+    "after_cgcs": 0.96,
+    "after_link_consistency": 0.96,
+    "after_global_stability": 1.0,
+    "projection_rate": 0.315,
+    "projection_success_rate": 0.8695604395604396,
+    "effective_cgcs": 0.8091666666666667,
+    "projection_gain": 0.2923611111111111,
+    "effective_gain": 0.14152777777777778
+  },
+  "figures": [
+    "figures/distributed_residue_graph_clean.png",
+    "figures/distributed_residue_graph_noisy.png",
+    "figures/cgcs_noise_sweep.png",
+    "figures/global_consistency_heatmap.png",
+    "figures/cgcs_projection_sweep.png",
+    "figures/cgcs_cost_aware_projection.png",
+    "figures/cost_aware_projection_phase_diagram.png"
+  ],
+  "results": [
+    "results/distributed_residue_consistency.csv",
+    "results/distributed_residue_projection.csv",
+    "results/distributed_residue_cost_aware_projection.csv"
+  ]
+}
