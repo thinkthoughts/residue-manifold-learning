@@ -1,3 +1,8 @@
+There exists a critical link-noise threshold below which
+distributed constraint systems remain stable without correction,
+and above which the required projection success follows
+a sublinear power-law scaling.
+##
 ![Residue Manifold Learning](figures/banner.png)
 
 # Residue Manifold Learning
