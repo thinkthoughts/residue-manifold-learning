@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Build / packaging
+build/
+dist/
+*.egg-info/
+
+# Data / results (optional control)
+# Keep curated results, ignore temp dumps
+results/tmp/
+results/*.tmp
+results/*.log
+
+# Figures (optional)
+# Uncomment if you ever generate intermediate figures
+# figures/tmp/
+
+# Notebook exports (if you ever dump these)
+*.csv~
+*.json~
+*.png~
+
+# Misc
+*.bak
+*.swp
