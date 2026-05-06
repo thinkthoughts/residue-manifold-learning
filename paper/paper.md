@@ -1,6 +1,14 @@
 # Residue Manifold Learning
 ## A Finite-State Model of Distributed Constraint Consistency, Projection, and Cost-Aware Stability
 
+<p align="center">
+  <a href="./paper.pdf"><strong>📄 Read the full paper (PDF)</strong></a>
+</p>
+
+<p align="center">
+  <em>Preprint (May 2026)</em>
+</p>
+
 ---
 
 ## Abstract
