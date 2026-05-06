@@ -97,7 +97,7 @@ Core (paper v1):
 
 Distributed extension (current work):
 
-8. 05_distributed_residue_consistency.ipynb  
+8. 08_distributed_residue_consistency.ipynb  
 
 ---
 
