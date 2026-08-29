@@ -1,0 +1,110 @@
+# specs/experiment.yaml  (revision 2)
+#
+# Revision note: v0.1's worked example ("Test 003") described a
+# units-mod-30/Q8 subgroup-selection result that was not actually
+# computed in this repo. It is removed. In its place: the schema fields
+# generalized so `tested_substructure`/`selection` cover both algebraic
+# substructures AND points in a swept numeric parameter space (noise
+# level, sampling rate, dictionary size) -- which is what this repo's
+# actual notebooks sweep over -- plus one real, currently-empty template
+# tied to an actual notebook, to be filled in from a Colab run.
+
+schema: experiment
+version: 0.2
+
+required_fields:
+  - id
+  - source
+  - objects_tested
+  - correspondence_kind_claimed
+  - tested_configuration   # required if correspondence_kind_claimed is selection_dependent (see correspondence.yaml)
+  - selection               # required alongside tested_configuration
+  - executable_ref
+  - observable_result
+  - summary
+  - physical_correspondence  # must be present and default to unestablished
+
+field_definitions:
+
+  id: {type: string, description: "e.g. exp_cgcs_noise_sweep_01."}
+
+  source: {type: string, description: "Which notebook or object is being tested, e.g. notebooks/08_distributed_residue_consistency.ipynb."}
+
+  objects_tested: {type: list, description: "object ids from reading-point.yaml, or a short description if not yet formalized as an object entry."}
+
+  correspondence_kind_claimed: {type: string, description: "Must be one of correspondence.yaml#correspondence_kinds. Use a statistical_correspondence child unless a group-theoretic test has actually been added."}
+
+  tested_configuration:
+    type: object
+    required_if: "correspondence.yaml marks correspondence_kind_claimed as selection_dependent: true"
+    fields:
+      type: {type: string, description: "e.g. noise_level_sweep, sampling_rate_sweep, dictionary_size_sweep, subgroup (reserved branch only)."}
+      swept_parameter: {type: string, description: "Name of the parameter varied across candidates, e.g. link_noise_std."}
+      units: {type: string, nullable: true}
+
+  selection:
+    type: object
+    required_if: "tested_configuration is present"
+    fields:
+      candidate_count: {type: integer, description: "How many parameter values / configurations were actually run, not how many exist in principle."}
+      candidates: {type: list, description: "All tested parameter values or configurations, not just the reported one."}
+      selected: {type: any, description: "The specific value/configuration this entry reports on."}
+      canonical: {type: boolean}
+      selection_basis:
+        type: string
+        enum: [unique, minimal, distinguished_algebraic, physically_motivated, first_found, arbitrary, other]
+        rules:
+          - "canonical: true is only valid with selection_basis in [unique, minimal, distinguished_algebraic]."
+          - "physically_motivated does not by itself imply canonical: true."
+          - "first_found and arbitrary must never pair with canonical: true."
+        other_note_required_if: "selection_basis == other"
+
+  executable_ref: {type: string, description: "Path to the notebook/script producing observable_result. No prose-only results."}
+
+  observable_result: {type: any, description: "Raw output for every tested configuration, not only the selected one."}
+
+  summary: {type: object, description: "Human-readable rollup. Must not claim more than observable_result supports, and must not collapse multiple tested configurations into a single unqualified statement."}
+
+  physical_correspondence:
+    type: object
+    default: {status: unestablished, evidence_type: null, evidence: []}
+    note: "A computational/statistical test cannot set this to 'supported'. See correspondence.yaml firewall."
+
+# --- Template: CGCS phase-lock status, tied to a real notebook ---
+#
+# This is a template, not a result. observable_result and summary are
+# left null/TBD. Fill in from an actual Colab run of the referenced
+# notebook(s) before this becomes a valid results.yaml entry -- do not
+# populate the null fields with invented or estimated numbers.
+
+template:
+  id: exp_cgcs_phase_lock_TBD
+  source: notebooks/06_cgcs_metric.ipynb
+  objects_tested: [TBD]
+  correspondence_kind_claimed: cgcs_phase_lock_status
+
+  tested_configuration:
+    type: TBD          # e.g. noise_level_sweep, sampling_rate_sweep
+    swept_parameter: TBD
+    units: TBD
+
+  selection:
+    candidate_count: TBD
+    candidates: []       # fill with every swept value actually run, not just the highlighted one
+    selected: TBD
+    canonical: TBD
+    selection_basis: TBD  # must be one of the enum values above
+
+  executable_ref: notebooks/06_cgcs_metric.ipynb
+
+  observable_result: null   # fill with per-candidate CGCS values from the Colab run
+
+  summary: null              # fill after observable_result is populated; must state
+                              # candidates_tested, how many crossed the 24/25 threshold,
+                              # and whether the reported candidate's status is unique
+                              # among the tested set or shared by others
+
+  physical_correspondence:
+    status: unestablished
+    evidence_type: null
+    evidence: []

@@ -1,0 +1,160 @@
+# specs/correspondence.yaml  (revision 2)
+#
+# Revision note: v0.1 built its worked example around a units-mod-30/Q8
+# comparison that does not exist in this repo's actual notebooks or
+# tests. That branch is kept below as `group_theoretic_tests`, marked
+# reserved, in case that work is deliberately started later -- but it is
+# no longer the spec's primary or only structural branch. A new
+# `statistical_correspondence` branch is added to cover what this repo
+# actually computes: reconstruction fidelity, coverage, CGCS threshold
+# status, and distributed consistency under noise.
+
+schema: correspondence
+version: 0.2
+
+correspondence_kinds:
+
+  shared_reading:
+    description: "Two objects, or two runs of the same object under different conditions, produced the same reading value. The floor, not evidence of anything further."
+    supported_by: [reading-point.yaml#reading]
+    implies: []
+
+  cardinality_match:
+    description: "Two objects (or structures derived from them) have equal cardinality or equal count of some enumerated feature."
+    supported_by: [shared_reading]
+    implies: []
+
+  # --- Branch 1: statistical / structural correspondence ---
+  # This is the branch this repo's actual work falls under.
+
+  statistical_correspondence:
+    description: "Branch point: claims about whether a recovered, sampled, or transmitted structure matches a reference structure, measured statistically rather than by exact algebraic identity."
+    children: [reconstruction_fidelity_match, coverage_match, cgcs_phase_lock_status, distributed_consistency_status]
+
+  reconstruction_fidelity_match:
+    description: >
+      A claim that a recovered/reconstructed representation (e.g. via NMF
+      or a sparse autoencoder) matches the reference residue-manifold
+      structure, at some stated quality level.
+    supported_by: [statistical_correspondence]
+    implies: []
+    selection_dependent: true
+    note: >
+      The repo's own central claim -- "reconstruction quality alone does
+      not imply structural fidelity" -- means a high reconstruction-
+      quality reading must NOT be read as this kind automatically. The
+      two are separate readings (see reading-point.yaml) and a
+      reconstruction_fidelity_match claim requires its own, separately
+      computed structural check, not an inference from reconstruction
+      error alone.
+
+  coverage_match:
+    description: "A claim that constraint-aligned sampling achieves a stated coverage of the residue manifold's structure."
+    supported_by: [statistical_correspondence]
+    implies: []
+    selection_dependent: true
+
+  cgcs_phase_lock_status:
+    description: >
+      A claim about whether a run is phase-locked or degraded, per the
+      CGCS threshold (CGCS >= 24/25 -> phase-locked; CGCS < 24/25 ->
+      degraded).
+    supported_by: [statistical_correspondence]
+    implies: []
+    selection_dependent: true
+    note: >
+      CGCS is computed under specific conditions (noise level, sampling
+      rate, dictionary size, etc.). A phase-lock status claim must record
+      which condition(s) were tested and which one is being reported, per
+      the selection_dependent rule below -- the same requirement that
+      applied to subgroup choice in v0.1, generalized.
+
+  distributed_consistency_status:
+    description: "A claim about whether a distributed system of residue constraints remains consistent, or degrades and is restored by projection, under a stated link-noise level."
+    supported_by: [statistical_correspondence]
+    implies: []
+    selection_dependent: true
+
+  # --- Branch 2: group-theoretic tests (reserved, not currently used) ---
+
+  group_theoretic_tests:
+    description: >
+      RESERVED. Branch point for algebraic structural tests (isomorphism,
+      homomorphism, common quotient) between two named algebraic objects,
+      e.g. a subgroup of units mod 30 and another finite group. No
+      notebook or test in this repo currently performs a test of this
+      kind. Do not populate results.yaml entries under this branch
+      without first adding the corresponding notebook/test and updating
+      this note.
+    children: [isomorphism, homomorphism, common_quotient, other_invariant_match]
+    status: unused
+
+  isomorphism:
+    description: "A structure-preserving bijection between the two objects (or named substructures) is exhibited."
+    supported_by: [group_theoretic_tests]
+    implies: []
+    status: unused
+
+  homomorphism:
+    description: "A structure-preserving map exists, not necessarily bijective."
+    supported_by: [group_theoretic_tests]
+    implies: []
+    status: unused
+
+  common_quotient:
+    description: "Some quotient of object A and some quotient of object B are isomorphic. Does not imply closeness to isomorphism; a sibling claim, not a rung on a ladder."
+    supported_by: [group_theoretic_tests]
+    implies: []
+    selection_dependent: true
+    status: unused
+
+  other_invariant_match:
+    description: "Any other named algebraic invariant matches."
+    supported_by: [group_theoretic_tests]
+    implies: []
+    status: unused
+
+  physical_correspondence:
+    description: >
+      A claim that a mathematical or statistical correspondence
+      corresponds to something physically real, or is causally linked to
+      a physical system.
+    supported_by: []
+    implies: []
+    firewall: true
+
+# --- Generalized selection-dependence rule ---
+#
+# Any correspondence_kind marked `selection_dependent: true` requires a
+# tested_configuration + selection block in its experiment entry (see
+# experiment.yaml), regardless of whether the "configuration" being
+# selected is an algebraic substructure (v0.1's original case) or a
+# point in a swept numeric parameter space -- a noise level, a sampling
+# rate, a dictionary size. The requirement is the same: report the full
+# set of tested configurations, not just the one being highlighted.
+
+# --- The physical-correspondence firewall (unchanged from v0.1) ---
+
+allowed_support:
+  - physical_measurement
+  - experimentally_grounded_observation
+
+forbidden_inference:
+  - shared_reading
+  - cardinality_match
+  - reconstruction_fidelity_match
+  - coverage_match
+  - cgcs_phase_lock_status
+  - distributed_consistency_status
+  - isomorphism
+  - homomorphism
+  - common_quotient
+  - other_invariant_match
+  - numerical_coincidence
+
+physical_correspondence_default:
+  status: unestablished
+  evidence_type: null
+  evidence: []
+
+status_values: [unestablished, supported, rejected, inapplicable]
