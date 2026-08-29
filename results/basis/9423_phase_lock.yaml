@@ -1,0 +1,90 @@
+# results/basis/9423_phase_lock.yaml
+#
+# Basis audit result. Source claim preserved verbatim as provenance;
+# result computed independently by tests/basis/test_9423_phase_lock.py.
+
+id: basis_audit_9423_phase_lock
+source: paper/persist.pdf, Section 3
+objects_tested: [weighted_9423_vector, diagonal_point_1_1]
+correspondence_kind_claimed: shared_reading
+
+source_claim:
+  statement: >
+    Weighted tuple (9,4,2,3) at angles {0,60,120,180} degrees; "the
+    diagonal direction theta=45 degrees corresponds to (1,1)"; the
+    combination is called a "9423 phase-lock representation."
+  location: "persist.pdf Section 3"
+  verbatim_preserved: true
+
+tested_configuration:
+  type: weight_to_angle_assignment_search
+  swept_parameter: permutation of weights [9,4,2,3] over the fixed angle set [0,60,120,180]
+  units: degrees
+
+selection:
+  candidate_count: 24
+  candidates_summary: "all 24 permutations of weight order against the fixed angle sequence; full list in observable_result"
+  selected:
+    weights_order: [9, 4, 2, 3]
+    angles_deg: [0, 60, 120, 180]
+  canonical: true
+  selection_basis: unique   # the literal order as stated in the source
+
+executable_ref: tests/basis/test_9423_phase_lock.py
+
+observable_result:
+  source_computed_reading_deg: 36.586776
+  target_computed_reading_deg: 45.0
+  permutations_checked: 24
+  exact_45_degree_matches: 0
+  vector: [7.0, 5.196152]
+  full_permutation_results: see tests/basis/test_9423_phase_lock.py output  # 24 entries, omitted here for length; script reproduces on demand
+
+summary:
+  shared_reading_status: rejected
+  structural_correspondence_status: unestablished
+  transformation_specified: false
+  claim_status: rejected
+  note: >
+    V, as literally constructed, has argument 36.586776 degrees, not 45
+    degrees. No permutation of the weight-to-angle assignment (24
+    checked, exhaustive) reaches 45 degrees. The point (1,1) is at 45
+    degrees on its own, but no map, normalization, projection, or
+    limiting operation is specified anywhere in the source connecting V
+    to (1,1). The two objects do not currently share the claimed
+    reading, let alone a specification -- this is a stronger failure
+    than a shared-reading collapse: there is no shared reading to begin
+    with.
+
+correspondence:
+  source_object: weighted_9423_vector
+  target_object: diagonal_point_1_1
+  claimed_reading: {type: phase_angle, value_deg: 45}
+  source_computed_reading_deg: 36.586776
+  target_computed_reading_deg: 45.0
+  transformation:
+    specified: false
+  structural_correspondence:
+    status: unestablished
+  shared_reading:
+    status: rejected
+
+physical_correspondence:
+  status: unestablished
+  evidence_type: null
+  evidence: []
+
+vocabulary_note: >
+  "9423" and "phase-lock" may remain useful as project labels/identifiers
+  independent of this result. This audit only rejects the specific
+  mathematical derivation claimed in persist.pdf Section 3 -- it does not
+  require retiring the vocabulary, only separating its use as a label
+  from any claim that it names a proven construction.
+
+downstream_dependencies:
+  - path: residue-manifold-learning/notebooks/07_phase_lock_geometry.ipynb
+    reference: "cosine phase-lock (~45deg)"
+    dependency_status: unaudited
+    note: >
+      Whether notebook 7's phase-lock geometry derives from or merely
+      shares vocabulary with this construction has not yet been checked.

@@ -1,0 +1,84 @@
+# results/basis/persistent_constant.yaml
+#
+# Basis audit result. Source claim preserved verbatim as provenance;
+# result computed independently by tests/basis/test_persistent_constant.py.
+# This entry does NOT rewrite the source claim -- it records what was
+# found alongside it.
+
+id: basis_audit_persistent_constant
+source: paper/persist.pdf, Section 1 / Section 2 (Lemma 1) / Section 8
+objects_tested: [S_Pk_L_naive_ratio, S_Pk_L_refined_ratio]
+correspondence_kind_claimed: cgcs_phase_lock_status  # placeholder; see note
+correspondence_kind_note: >
+  This claim predates the correspondence.yaml taxonomy and doesn't map
+  cleanly onto an existing kind. It's closest to reconstruction_fidelity_match
+  in spirit (does an empirical count match a predicted density), scored
+  against two different predictors. Treat this field as provisional until
+  correspondence.yaml gets a dedicated "asymptotic density match" kind.
+
+source_claim:
+  statement: "r(L, Pk) -> 24/25"
+  location: "persist.pdf Section 1 / Section 8"
+  verbatim_preserved: true
+
+tested_configuration:
+  type: L_sweep
+  swept_parameter: L
+  units: null
+
+selection:
+  candidate_count: 4
+  candidates: [100000, 1000000, 10000000, 100000000]
+  selected: 100000000
+  canonical: true
+  selection_basis: unique   # largest L tested; convergence behavior consistent across all four
+
+executable_ref: tests/basis/test_persistent_constant.py
+
+observable_result:
+  Pk: 210
+  naive_predictor_results:
+    - {L: 100000,    actual: 11428,    predicted: 3809.5238,   ratio: 2.99985}
+    - {L: 1000000,   actual: 114285,   predicted: 38095.2381,  ratio: 2.99998}
+    - {L: 10000000,  actual: 1142856,  predicted: 380952.3810, ratio: 3.00000}
+    - {L: 100000000, actual: 11428571, predicted: 3809523.8095,ratio: 3.00000}
+  refined_predictor_results:
+    - {L: 100000,    actual: 11428,    predicted: 11428.5714,   ratio: 0.99995}
+    - {L: 1000000,   actual: 114285,   predicted: 114285.7143,  ratio: 0.99999}
+    - {L: 10000000,  actual: 1142856,  predicted: 1142857.1429, ratio: 1.00000}
+    - {L: 100000000, actual: 11428571, predicted: 11428571.4286,ratio: 1.00000}
+
+summary:
+  naive_ratio_limit_observed: 3.000000
+  refined_ratio_limit_observed: 1.000000
+  claimed_value: 0.96   # 24/25
+  claim_status: rejected
+  note: >
+    r(L,Pk) converges to 3.000000 against the naive predictor the paper
+    defines it with, and to 1.000000 against Lemma 1's own refined
+    heuristic. Neither is 24/25. Lemma 1 is independently correct: the
+    naive predictor double-counts the exclusion of primes 2 and 3 (once
+    via the mod-6 residue restriction, again via phi(Pk)/Pk), producing
+    a factor-of-3 discrepancy. If Lemma 1's refined heuristic is used
+    instead, Section 7's stated open problem is already resolved and
+    does not require further analytic explanation.
+  data_note: >
+    The printed table in persist.pdf Section 4 (27/20, 23/20, 51/50,
+    49/50 at L=10^5..10^8) does not match the output of the paper's own
+    Appendix A code when run as written, at any of the four L values.
+
+physical_correspondence:
+  status: unestablished
+  evidence_type: null
+  evidence: []
+
+downstream_dependencies:
+  - path: residue-manifold-learning/README.md
+    reference: "CGCS >= 24/25 -> phase-locked; CGCS < 24/25 -> degraded"
+    dependency_status: unaudited
+    note: >
+      Whether the CGCS threshold's specific value of 24/25 was derived
+      from this claim, or independently chosen and only coincidentally
+      matches it, has not yet been checked. Flagged for a separate
+      dependency audit before this threshold is cited as inheriting
+      justification from persist.pdf.
