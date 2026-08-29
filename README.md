@@ -4,6 +4,8 @@
 
 The project develops a reproducible pipeline showing how structured sampling, representation, and **constraint consistency across noisy links** determine whether underlying modular structure is preserved, degraded, or recoverable. Alongside the notebook pipeline, the repo now includes a specification layer (`specs/`) for stating correspondence claims precisely and auditing them — including auditing this project's own originating paper.
 
+> **Status:** Active experimental project. Core notebook results are being re-audited under the repository's new specification framework. Two claims inherited from the originating paper have been computationally rejected (see Basis audit, below), and the CGCS/phase-lock dependencies on those claims are under audit — not yet confirmed dependent, not yet confirmed independent.
+
 ---
 
 ## Reading Point
@@ -16,13 +18,13 @@ Reconstruction quality is a **reading** — a single number produced by one meas
 
 See [readingpoint.app](https://readingpoint.app) for the general statement of this principle across other domains, and `specs/reading-point.yaml` for how this repo formalizes it: every experiment records the reading it produced and the specification it was checked against as separate, explicit fields.
 
-The phase-lock geometry in `notebooks/07_phase_lock_geometry.ipynb` connects to the same principle: a cosine similarity near 45° is one reading; whether that reading corresponds to genuine phase-locked structure, versus a coincidental angle, is a separate, specified claim — the distinction the CGCS threshold exists to make precise. (Whether that notebook's construction is itself derived from `paper/persist.pdf`'s phase-lock claim, addressed below, or only shares its vocabulary, is currently unaudited.)
+The phase-lock geometry in `notebooks/07_phase_lock_geometry.ipynb` connects to the same principle: a cosine similarity near 45° is one reading; whether that reading corresponds to the structure classified as phase-locked by CGCS is a separate, specified claim. (Whether that notebook's construction is itself derived from `paper/persist.pdf`'s phase-lock claim, addressed below, or only shares its vocabulary, is currently unaudited.)
 
 ---
 
 ## Core idea
 
-Prime-support residues modulo 30 form an eight-lane discrete manifold embedded in ℤ/30ℤ.
+The reduced residue classes modulo 30, {1, 7, 11, 13, 17, 19, 23, 29} — the canonical object (ℤ/30ℤ)ˣ — provide RML's eight-lane discrete state space. Every prime p > 5 falls into one of these eight classes. ("Manifold" here is project terminology for this discrete state space, not a manifold in the differential/topological sense.)
 
 RML investigates:
 
@@ -47,7 +49,7 @@ The notebooks build a systems chain:
 3. **Recovery** — NMF recovers compact structure
 4. **Failure modes** — sparse representations fragment structure
 5. **Metric** — CGCS quantifies structural fidelity
-6. **Geometry** — structure corresponds to a cosine phase-lock (~45°)
+6. **Geometry** — notebook 07 tests a cosine phase-lock near 45°; its dependency on the originating 9423 construction is under audit
 7. **Distributed systems** — noisy links degrade global consistency
 8. **Projection** — constraint projection restores consistency
 9. **Cost-aware stability** — recovery requires increasing effort under noise
@@ -157,14 +159,14 @@ Distributed extension:
 CGCS = (local coverage) × (local validity) × (link consistency) × (global stability)
 ```
 
-Threshold:
+Configured threshold (provenance audit pending):
 
 ```
-CGCS >= 24/25 → phase-locked
-CGCS <  24/25 → degraded
+CGCS >= 24/25 → classified as phase-locked
+CGCS <  24/25 → classified as degraded
 ```
 
-The specific value 24/25 is shared with `paper/persist.pdf`'s rejected persistent-constant claim (see Basis audit, above). Whether that's the threshold's actual derivation or a coincidental match to a rejected claim is currently unaudited — treat the threshold as a configured value pending that check, not as inheriting proof from the paper.
+The specific value 24/25 is shared with `paper/persist.pdf`'s rejected persistent-constant claim (see Basis audit, above). Whether that's the threshold's actual derivation or a coincidental match to a rejected claim is currently unaudited — treat the threshold as a configured decision boundary pending that check, not as a value derived from proven mathematics. ("Classified as," not "is": CGCS crossing this line changes the label a run is given, not a mathematical implication about the run.)
 
 ---
 
