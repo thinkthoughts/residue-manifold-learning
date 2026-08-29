@@ -39,6 +39,37 @@ A central result is:
 > reconstruction quality alone does not imply structural fidelity.
 
 ---
+## Reading Point
+
+[#reading-point](#reading-point)
+
+This repo's central result is already an instance of a general principle:
+
+> reconstruction quality alone does not imply structural fidelity.
+
+Reconstruction quality is a **reading** -- a single number produced by one
+measurement procedure. Structural fidelity is a separate, independently
+specified property, checked by a different procedure. Two runs can share
+a reconstruction-quality reading while differing in structural fidelity;
+sharing the reading never identifies the two runs as structurally the
+same. See [readingpoint.app](https://readingpoint.app) for the general
+statement of this principle across other domains, and
+[specs/reading-point.yaml](specs/reading-point.yaml) /
+[specs/correspondence.yaml](specs/correspondence.yaml) for how this repo
+formalizes it: every experiment records the reading it produced and the
+specification it was checked against as separate, explicit fields, and
+`physical_correspondence` can never be inferred from a statistical or
+mathematical reading alone (see `correspondence.yaml`'s firewall).
+
+The phase-lock geometry in
+[notebook 7](notebooks/07_phase_lock_geometry.ipynb) is a concrete case
+of this same principle: a cosine similarity near 45° is one reading;
+whether that reading corresponds to genuine phase-locked structure,
+versus a coincidental angle, is a separate, specified claim -- exactly
+the distinction the CGCS threshold (`>= 24/25` phase-locked,
+`< 24/25` degraded) exists to make precise.
+
+--
 
 ## What this repo demonstrates
 
