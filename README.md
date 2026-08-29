@@ -8,7 +8,7 @@ a sublinear power-law scaling. (<a href="notebooks/09_projection_threshold_bound
 # Residue Manifold Learning
 
 <p align="center">
-  <a href="paper/main.pdf"><strong>📄 Read the full paper (PDF)</strong></a>
+  <a href="https://goodmath.app"><strong>📄 Read the full paper (goodmath.app)</strong></a>
 </p>
 
 <p align="center">
