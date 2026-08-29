@@ -4,7 +4,7 @@
 
 The project develops a reproducible pipeline showing how structured sampling, representation, and **constraint consistency across noisy links** determine whether underlying modular structure is preserved, degraded, or recoverable. Alongside the notebook pipeline, the repo now includes a specification layer (`specs/`) for stating correspondence claims precisely and auditing them — including auditing this project's own originating paper.
 
-> **Status:** Active experimental project. Core notebook results are being re-audited under the repository's new specification framework. Two claims inherited from the originating paper have been computationally rejected (see Basis audit, below), and the CGCS/phase-lock dependencies on those claims are under audit — not yet confirmed dependent, not yet confirmed independent.
+> **Status:** Active experimental project. Core notebook results are being re-audited under the repository's new specification framework. Two claims inherited from the originating paper have been computationally rejected (see Basis audit, below), and the CGCS/phase-lock dependencies on those claims remain open, pending audit.
 
 ---
 
@@ -12,9 +12,9 @@ The project develops a reproducible pipeline showing how structured sampling, re
 
 This repo's central result is already an instance of a general principle:
 
-> reconstruction quality alone does not imply structural fidelity.
+> reconstruction quality and structural fidelity are independently specified properties.
 
-Reconstruction quality is a **reading** — a single number produced by one measurement procedure. Structural fidelity is a separate, independently specified property, checked by a different procedure. Two runs can share a reconstruction-quality reading while differing in structural fidelity; sharing the reading never identifies the two runs as structurally the same.
+Reconstruction quality is a **reading** — a single number produced by one measurement procedure. Structural fidelity is a separate, independently specified property, checked by a different procedure. Two runs can share a reconstruction-quality reading while their structural fidelity is established separately, on its own evidence.
 
 See [readingpoint.app](https://readingpoint.app) for the general statement of this principle across other domains, and `specs/reading-point.yaml` for how this repo formalizes it: every experiment records the reading it produced and the specification it was checked against as separate, explicit fields.
 
@@ -24,7 +24,7 @@ The phase-lock geometry in `notebooks/07_phase_lock_geometry.ipynb` connects to 
 
 ## Core idea
 
-The reduced residue classes modulo 30, {1, 7, 11, 13, 17, 19, 23, 29} — the canonical object (ℤ/30ℤ)ˣ — provide RML's eight-lane discrete state space. Every prime p > 5 falls into one of these eight classes. ("Manifold" here is project terminology for this discrete state space, not a manifold in the differential/topological sense.)
+The reduced residue classes modulo 30, {1, 7, 11, 13, 17, 19, 23, 29} — the canonical object (ℤ/30ℤ)ˣ — provide RML's eight-lane discrete state space. Every prime p > 5 falls into one of these eight classes. ("Manifold" here is project terminology for this discrete state space, distinct from the differential/topological sense of the term.)
 
 RML investigates:
 
@@ -36,7 +36,7 @@ RML investigates:
 - how **stability becomes cost-dependent at scale**.
 
 A central result is:
-> reconstruction quality alone does not imply structural fidelity.
+> reconstruction quality and structural fidelity are independently specified properties.
 
 ---
 
@@ -60,9 +60,9 @@ The notebooks build a systems chain:
 
 Three specs govern how correspondence claims are made and bounded across this repo:
 
-- **`reading-point.yaml`** — the core ontology: object → specification → interaction → observable → reading. States the invariant that a shared reading between two objects does not by itself imply a shared specification.
-- **`correspondence.yaml`** — the vocabulary for correspondence claims (shared reading, cardinality match, statistical correspondence, group-theoretic tests, physical correspondence), their branching structure, and a firewall: no mathematical or statistical test can, on its own, establish `physical_correspondence`.
-- **`experiment.yaml`** — the required schema for any test entry: which configuration was tested, what else was tested alongside it (`selection`), whether the reported choice was canonical, and the executable that produced the result. No entry may assert a result without a reproducible script behind it.
+- **`reading-point.yaml`** — the core ontology: object → specification → interaction → observable → reading. States the invariant that a shared reading between two objects leaves their specifications to be established separately.
+- **`correspondence.yaml`** — the vocabulary for correspondence claims (shared reading, cardinality match, statistical correspondence, group-theoretic tests, physical correspondence), their branching structure, and a firewall: `physical_correspondence` can only be set to `supported` through evidence in `allowed_support` (a physical measurement or experimentally grounded observation), independent of any mathematical or statistical test result.
+- **`experiment.yaml`** — the required schema for any test entry: which configuration was tested, what else was tested alongside it (`selection`), whether the reported choice was canonical, and the executable that produced the result. Every entry's result traces to a reproducible script.
 
 ## Basis audit (`tests/basis/`, `results/basis/`)
 
@@ -70,12 +70,12 @@ The originating paper for this project, `paper/persist.pdf`, made two central cl
 
 | Claim | Location | Result |
 |---|---|---|
-| A normalized residue-counting ratio r(L, Pk) converges to a persistent constant 24/25 | Section 1 / Section 8 | **Rejected.** The ratio converges to 3 against the paper's own naive predictor, and to 1 against the paper's own Lemma 1 (its refined heuristic is correct; it just isn't applied to the headline claim). |
-| A weighted-vector construction (9,4,2,3) at four fixed angles corresponds to the 45° diagonal, called a "9423 phase-lock representation" | Section 3 | **Rejected.** The construction's actual angle is 36.586776°; an exhaustive search over all 24 weight-to-angle assignments finds none that reach 45°; no transformation between the construction and the diagonal point is specified anywhere in the source. |
+| A normalized residue-counting ratio r(L, Pk) converges to a persistent constant 24/25 | Section 1 / Section 8 | **Rejected.** The ratio converges to 3 against the paper's own naive predictor, and to 1 against the paper's own Lemma 1 (its refined heuristic is correct; the headline claim uses the naive predictor instead). |
+| A weighted-vector construction (9,4,2,3) at four fixed angles corresponds to the 45° diagonal, called a "9423 phase-lock representation" | Section 3 | **Rejected.** The construction's actual angle is 36.586776°; an exhaustive search over all 24 weight-to-angle assignments finds the closest approaches at 43.898° and 46.102°, each about 1.1° from 45°; the source leaves the transformation between the construction and the diagonal point unspecified. |
 
-Both results are recorded in `results/basis/`, with the original claims preserved verbatim as provenance rather than edited away. Neither result deletes the paper or retires its vocabulary — `paper/persist.pdf` is kept as a **historical / hypothesis-source** document rather than a verified computational basis. Definitions and labels that originated there (including "9423" and "CGCS") can remain useful as identifiers independent of whether their originating derivation held up; that distinction is tracked per-claim, not assumed either way.
+Both results are recorded in `results/basis/`, with the original claims preserved verbatim as provenance alongside them. `paper/persist.pdf` is kept as a **historical / hypothesis-source** document, distinct from a verified computational basis. Definitions and labels that originated there (including "9423" and "CGCS") can remain useful as identifiers independent of their originating derivation's status; that distinction is tracked per-claim.
 
-Two dependency questions are flagged as **unaudited**, not resolved in either direction:
+Two dependency questions are flagged as **unaudited**, open in both directions:
 
 - Whether the CGCS `>= 24/25` phase-locked threshold was derived from the rejected persistent-constant claim, or chosen independently and only coincidentally shares the value.
 - Whether `notebooks/07_phase_lock_geometry.ipynb`'s ~45° cosine phase-lock derives from the rejected §3 construction, or only shares its vocabulary.
@@ -141,7 +141,7 @@ Core (paper v1):
 Distributed extension:
 
 8. `08_distributed_residue_consistency.ipynb`
-9. `09_projection_threshold_boundary.ipynb` — there exists a critical link-noise threshold below which distributed constraint systems remain stable without correction, and above which required projection success follows a sublinear power-law scaling.
+9. `09_projection_threshold_boundary.ipynb` — a critical link-noise threshold exists: below it, distributed constraint systems stay stable on their existing constraints, and above it, required projection success follows a sublinear power-law scaling.
 
 ---
 
@@ -166,7 +166,7 @@ CGCS >= 24/25 → classified as phase-locked
 CGCS <  24/25 → classified as degraded
 ```
 
-The specific value 24/25 is shared with `paper/persist.pdf`'s rejected persistent-constant claim (see Basis audit, above). Whether that's the threshold's actual derivation or a coincidental match to a rejected claim is currently unaudited — treat the threshold as a configured decision boundary pending that check, not as a value derived from proven mathematics. ("Classified as," not "is": CGCS crossing this line changes the label a run is given, not a mathematical implication about the run.)
+The specific value 24/25 is shared with `paper/persist.pdf`'s rejected persistent-constant claim (see Basis audit, above). Whether that's the threshold's actual derivation or a coincidental match to a rejected claim is currently unaudited — treat the threshold as a configured decision boundary, pending that check, rather than a value with proven mathematical derivation. ("Classified as," here, names what CGCS crossing this line does: it assigns a label to the run.)
 
 ---
 
