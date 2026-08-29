@@ -1,0 +1,78 @@
+# specs/reading-point.yaml
+#
+# Defines the core RML ontology: an object, under a specification, produces
+# a reading through some interaction. Two objects can share a reading
+# without sharing a specification. This spec does not claim any
+# correspondence between objects that share a reading -- see
+# correspondence.yaml for how correspondence claims are made and bounded.
+
+schema: reading-point
+version: 0.1
+
+definitions:
+
+  object:
+    description: >
+      A mathematical, physical, or empirical entity under study. An object
+      is never itself a reading; it is what a specification is applied to.
+    required_fields: [id, kind, description]
+    fields:
+      id: {type: string, description: "Short unique identifier, e.g. U_30, Q8."}
+      kind: {type: string, description: "group, manifold, dataset, mechanism, physical system, etc."}
+      description: {type: string}
+
+  specification:
+    description: >
+      A precise, checkable characterization of an object -- its structure,
+      constraints, and the operations defined on it. Two objects with the
+      same reading may have different specifications; this is the default
+      assumption, not an edge case.
+    required_fields: [id, object_ref, structure, constraints]
+    fields:
+      id: {type: string}
+      object_ref: {type: string, description: "id of the object this specification characterizes."}
+      structure: {type: string, description: "e.g. group presentation, topological structure, statistical model."}
+      constraints: {type: list, description: "Axioms, invariants, or boundary conditions that must hold."}
+
+  interaction:
+    description: >
+      The operation, measurement, or test applied to a specified object to
+      produce an observable. Must be executable or at minimum precisely
+      reproducible by a human following its description -- not asserted.
+    required_fields: [id, specification_ref, operation]
+    fields:
+      id: {type: string}
+      specification_ref: {type: string}
+      operation: {type: string, description: "What is computed or measured."}
+      executable_ref: {type: string, required: false, description: "Path to the script/notebook that performs this, if automated."}
+
+  observable:
+    description: >
+      The raw output of an interaction, before any reading is assigned to
+      it. Kept separate from `reading` so the reading assignment step is
+      auditable on its own.
+    required_fields: [id, interaction_ref, value]
+    fields:
+      id: {type: string}
+      interaction_ref: {type: string}
+      value: {type: any, description: "The measured or computed result, in its native form."}
+
+  reading:
+    description: >
+      A named value, category, or numeral assigned to an observable. A
+      reading is the thing that can coincide across distinct objects. A
+      reading by itself asserts nothing about the objects that produced it.
+    required_fields: [id, observable_ref, value]
+    fields:
+      id: {type: string}
+      observable_ref: {type: string}
+      value: {type: any, description: "e.g. 8, 'C2xC2', 'wasteful', 'validated'."}
+
+invariant:
+  statement: >
+    r(O_1) = r(O_2) does not imply S(O_1) = S(O_2), where r is a reading
+    and S is a specification. A shared reading is evidence that two
+    objects were run through interactions producing the same observable
+    category -- nothing more, until a correspondence claim is separately
+    made and separately supported. See correspondence.yaml.
+  applies_to: [object, specification, interaction, observable, reading]
